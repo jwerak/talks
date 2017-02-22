@@ -1,0 +1,3 @@
+[submodule "kube-vault"]
+	path = kube-vault
+	url = git@github.com:veverjak/kube-vault-demo.git

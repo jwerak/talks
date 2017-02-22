@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>What are Containers good for?</title>
+<meta name="author" content="(Jakub Veverka (@jwerak))"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="file:///home/jveverka/projects/github/reveal.js/css/reveal.css"/>
+
+<link rel="stylesheet" href="file:///home/jveverka/projects/github/reveal.js/css/theme/solarized.css" id="theme"/>
+
+
+<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+<script>
+    if( window.location.search.match( /print-pdf/gi ) ) {
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = 'file:///home/jveverka/projects/github/reveal.js/css/print/pdf.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    }
+</script>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">What are Containers good for?</h1><h2 class="author">Jakub Veverka (@jwerak)</h2>
+</section>
+<section>
+<section id="slide-org6e4c7e5">
+<h2 id="org6e4c7e5">About me</h2>
+<ul>
+<li>Appuri</li>
+<li>Container meetup</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orgc4c9055">
+<h2 id="orgc4c9055">About talk</h2>
+<ul>
+<li>Introduction to (Docker like) containers</li>
+<li>Development lifecycle with containers</li>
+<li>What are containers good/bad for</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org4b3bc42">
+<h2 id="org4b3bc42">About containers</h2>
+<div class="outline-text-2" id="text-org4b3bc42">
+</div></section>
+<section id="slide-org1378f6f">
+<h3 id="org1378f6f">Evolution of containers</h3>
+<ul>
+<li class="fragment appear">chroot - 1979 (Unix)</li>
+<li class="fragment appear">Jails - 2000 (FreeBSD)</li>
+<li class="fragment appear">Linux-VServer - 2001 (Linux) (first namespace separation)</li>
+<li class="fragment appear">cgroups - 2006 (Linux)</li>
+<li class="fragment appear">Linux Namespaces + LXC - 2008 (Linux)</li>
+<li class="fragment appear">Docker opensourced - 2013 (Linux)</li>
+
+</ul>
+</section>
+<section id="slide-org5222af0">
+<h3 id="org5222af0">What are containers</h3>
+<ul>
+<li class="fragment appear">package up an application</li>
+<li class="fragment appear">contain applications</li>
+<li class="fragment appear">consistent among environments</li>
+<li class="fragment appear">kernel features
+<ul>
+<li>Namespaces</li>
+<li>cgroups</li>
+<li>Selinux, capabilities, &#x2026;</li>
+
+</ul></li>
+<li class="fragment appear">Why containers and not only Docker?</li>
+
+</ul>
+<aside class="notes">
+<ul>
+<li>Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package.</li>
+<li>Linux containers contain applications in a way that keep them isolated from the host system that they run on.</li>
+<li>And they are designed to make it easier to provide a consistent experience as developers and system administrators move code from development environments into production in a fast and replicable way.</li>
+
+</ul>
+
+</aside>
+</section>
+</section>
+<section>
+<section id="slide-org3adbd47">
+<h2 id="org3adbd47">Containers vs VMs</h2>
+
+<div class="figure">
+<p><img src="./pics/virtualization-vs-containers.png" alt="virtualization-vs-containers.png" />
+</p>
+</div>
+</section>
+<section id="slide-org296d79a">
+<h3 id="org296d79a">Differences</h3>
+<ul>
+<li>Resource utilization</li>
+<li>Startup time</li>
+<li>deployment time</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org6c324aa">
+<h2 id="org6c324aa">Container images</h2>
+<div class="outline-text-2" id="text-org6c324aa">
+</div></section>
+<section id="slide-orgb2b04b6">
+<h3 id="orgb2b04b6">How to create container images</h3>
+<p>
+Dockerfile -&gt; image -&gt; container
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-dockerfile"><span style="color: #4f97d7; font-weight: bold;">FROM</span> debian
+<span style="color: #4f97d7; font-weight: bold;">RUN</span> apt-get install emacs
+<span style="color: #4f97d7; font-weight: bold;">RUN</span> apt-get install apache2
+<span style="color: #4f97d7; font-weight: bold;">ADD</span> app /app
+<span style="color: #4f97d7; font-weight: bold;">CMD</span> <span style="color: #4f97d7;">[</span><span style="color: #2d9574;">"/usr/sbin/apache2"</span>, <span style="color: #2d9574;">"-DFOREGROUND"</span><span style="color: #4f97d7;">]</span>
+</pre>
+</div>
+
+<p>
+Docker image layers
+</p>
+
+<div class="figure">
+<p><img src="./pics/docker_image_2.png" alt="docker_image_2.png" width="400px" />
+</p>
+</div>
+</section>
+<section id="slide-org8573a2d">
+<h3 id="org8573a2d">How to distribute container images</h3>
+<ul>
+<li>registry</li>
+<li>artifactory</li>
+<li>http server</li>
+<li>&#x2026;</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org0f0bfd4">
+<h2 id="org0f0bfd4">Development lifecycle with apps in containers</h2>
+<div class="outline-text-2" id="text-org0f0bfd4">
+</div></section>
+<section id="slide-org186fd5b">
+<h3 id="org186fd5b">Coding phase</h3>
+<ul>
+<li class="fragment appear">writing app</li>
+<li class="fragment appear">sharing with colleagues</li>
+<li class="fragment appear">booting to custom project</li>
+<li class="fragment appear">but we had the same with vms, didn't we?</li>
+
+</ul>
+</section>
+<section id="slide-org4d46b1d">
+<h3 id="org4d46b1d">CI/Test phase</h3>
+<ul>
+<li class="fragment appear">Containerized CI slaves/minions
+<ul>
+<li>resource utilization</li>
+<li>simple setup of custom build environments</li>
+
+</ul></li>
+<li class="fragment appear">Containerized artefacts
+<ul>
+<li>Unified test and production libraries</li>
+
+</ul></li>
+
+</ul>
+</section>
+<section id="slide-org476f5dd">
+<h3 id="org476f5dd">Deployment/Production</h3>
+<ul>
+<li class="fragment appear">Containers are best fit to dynamic environments</li>
+<li class="fragment appear">Deploying containers manually is error prone and doesn't scale</li>
+<li class="fragment appear">Containers on their own are not suitable for production</li>
+<li class="fragment appear">For larger environments orchestrator is needed to:
+<ul>
+<li>ensure requested apps are running</li>
+<li>apps are healthy</li>
+<li>apps are accessible</li>
+<li>apps can talk to each other</li>
+<li>apps are started in desired environment</li>
+<li>&#x2026;</li>
+
+</ul></li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-orge27849e">
+<h2 id="orge27849e">Containers and security</h2>
+<ul>
+<li class="fragment appear">Do containers enhance security on its own?
+<ul>
+<li>chroot by default</li>
+<li>resource limitation (rogue process can't steal from other) (cgroups)</li>
+
+</ul></li>
+<li class="fragment appear">Selinux, AppArmor, etc
+<ul>
+<li>adds privilege separation layer between processes</li>
+
+</ul></li>
+<li class="fragment appear">kernel capabilities</li>
+<li class="fragment appear">Seccomp</li>
+
+</ul>
+
+<aside class="notes">
+<p>
+mention Java 1.8 and cgroups
+</p>
+
+</aside>
+</section>
+</section>
+<section>
+<section id="slide-orgd228e27">
+<h2 id="orgd228e27">Summary</h2>
+<div class="outline-text-2" id="text-orgd228e27">
+</div></section>
+<section id="slide-orgd9338ea">
+<h3 id="orgd9338ea">What are containers good for</h3>
+<ul>
+<li>simple packaging (including dependencies), only kernel is shared between containers</li>
+<li>applying limits</li>
+<li>stateless applications/microservices</li>
+<li>12 factor apps</li>
+
+</ul>
+</section>
+<section id="slide-org176a274">
+<h3 id="org176a274">What are containers bad for (still)</h3>
+<ul>
+<li>legacy applications</li>
+<li>stateful applications</li>
+<li>traditional SQL databases</li>
+
+</ul>
+</section>
+</section>
+<section>
+<section id="slide-org31adc0d">
+<h2 id="org31adc0d">Questions?</h2>
+</section>
+</section>
+<section>
+<section id="slide-org68d9066">
+<h2 id="org68d9066">Sources</h2>
+<ul>
+<li><a href="http://rhelblog.redhat.com/2015/08/28/the-history-of-containers/">http://rhelblog.redhat.com/2015/08/28/the-history-of-containers/</a></li>
+<li><a href="http://www.infoworld.com/article/3072929/linux/containers-101-linux-containers-and-docker-explained.html">http://www.infoworld.com/article/3072929/linux/containers-101-linux-containers-and-docker-explained.html</a></li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="file:///home/jveverka/projects/github/reveal.js/lib/js/head.min.js"></script>
+<script src="file:///home/jveverka/projects/github/reveal.js/js/reveal.js"></script>
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+
+controls: true,
+progress: true,
+history: false,
+center: true,
+slideNumber: 'c',
+rollingLinks: false,
+keyboard: true,
+overview: true,
+
+theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+transitionSpeed: 'default',
+multiplex: {
+    secret: '', // null if client
+    id: '', // id, obtained from socket.io server
+    url: '' // Location of socket.io server
+},
+
+// Optional libraries used to extend on reveal.js
+dependencies: [
+ { src: 'file:///home/jveverka/projects/github/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+ { src: 'file:///home/jveverka/projects/github/reveal.js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'file:///home/jveverka/projects/github/reveal.js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+ { src: 'file:///home/jveverka/projects/github/reveal.js/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+ { src: 'file:///home/jveverka/projects/github/reveal.js/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }]
+});
+</script>
+</body>
+</html>

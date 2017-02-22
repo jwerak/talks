@@ -1,0 +1,117 @@
+#+REVEAL_HLEVEL: 1
+#+REVEAL_THEME: solarized
+#+OPTIONS: toc:0 
+#+OPTIONS: timestamp:nil
+#+OPTIONS: num:nil
+#+AUTHOR: Jakub Veverka (@jwerak)
+#+REVEAL_ROOT: file:///home/jveverka/projects/github/reveal.js
+#+Title: What are Containers good for?
+* About me
+- Appuri
+- Container meetup
+* About talk 
+- Introduction to (Docker like) containers
+- Development lifecycle with containers
+- What are containers good/bad for
+* About containers
+** Evolution of containers
+#+ATTR_REVEAL: :frag (appear)
+- chroot - 1979 (Unix)
+- Jails - 2000 (FreeBSD)
+- Linux-VServer - 2001 (Linux) (first namespace separation)
+- cgroups - 2006 (Linux)
+- Linux Namespaces + LXC - 2008 (Linux)
+- Docker opensourced - 2013 (Linux)
+** What are containers
+#+ATTR_REVEAL: :frag (appear)
+- package up an application
+- contain applications
+- consistent among environments
+- kernel features
+  - Namespaces
+  - cgroups
+  - Selinux, capabilities, ...
+- Why containers and not only Docker?
+#+BEGIN_NOTES
+- Containers allow a developer to package up an application with all of the parts it needs, such as libraries and other dependencies, and ship it all out as one package.
+- Linux containers contain applications in a way that keep them isolated from the host system that they run on. 
+- And they are designed to make it easier to provide a consistent experience as developers and system administrators move code from development environments into production in a fast and replicable way.
+#+END_NOTES
+* Containers vs VMs
+[[./pics/virtualization-vs-containers.png]]
+** Differences
+- Resource utilization
+- Startup time
+- deployment time
+* Container images
+** How to create container images
+Dockerfile -> image -> container
+#+BEGIN_SRC dockerfile
+FROM debian
+RUN apt-get install emacs
+RUN apt-get install apache2
+ADD app /app
+CMD ["/usr/sbin/apache2", "-DFOREGROUND"]
+#+END_SRC 
+
+Docker image layers
+#+attr_html: :width 400px
+[[./pics/docker_image_2.png]]
+** How to distribute container images
+- registry
+- artifactory
+- http server
+- ...
+* Development lifecycle with apps in containers
+** Coding phase
+#+ATTR_REVEAL: :frag (appear)
+  - writing app
+  - sharing with colleagues
+  - booting to custom project
+  - but we had the same with vms, didn't we?
+** CI/Test phase
+#+ATTR_REVEAL: :frag (appear)
+  - Containerized CI slaves/minions
+    - resource utilization
+    - simple setup of custom build environments
+  - Containerized artefacts
+    - Unified test and production libraries
+** Deployment/Production
+#+ATTR_REVEAL: :frag (appear)
+- Containers are best fit to dynamic environments
+- Deploying containers manually is error prone and doesn't scale
+- Containers on their own are not suitable for production
+- For larger environments orchestrator is needed to:
+  - ensure requested apps are running
+  - apps are healthy
+  - apps are accessible
+  - apps can talk to each other
+  - apps are started in desired environment
+  - ...
+* Containers and security
+#+ATTR_REVEAL: :frag (appear)
+- Do containers enhance security on its own?
+  - chroot by default
+  - resource limitation (rogue process can't steal from other) (cgroups)
+- Selinux, AppArmor, etc
+  - adds privilege separation layer between processes
+- kernel capabilities
+- Seccomp
+
+#+BEGIN_NOTES
+mention Java 1.8 and cgroups
+#+END_NOTES
+* Summary
+** What are containers good for
+- simple packaging (including dependencies), only kernel is shared between containers
+- applying limits
+- stateless applications/microservices
+- 12 factor apps
+** What are containers bad for (still)
+- legacy applications
+- stateful applications
+- traditional SQL databases
+* Questions?
+* Sources
+- http://rhelblog.redhat.com/2015/08/28/the-history-of-containers/
+- http://www.infoworld.com/article/3072929/linux/containers-101-linux-containers-and-docker-explained.html
