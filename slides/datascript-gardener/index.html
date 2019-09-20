@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Gardener: Správa Kubernetes pomocí Kubernetes</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="../static/css/chocolate.css" type="text/css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            /* copy by clicking on code */
+            $('code').on('click', function() {
+                var $temp = $("<textarea></textarea>");
+                $("body").append($temp);
+                $temp.val($(this).text()).select();
+                document.execCommand("copy");
+                $temp.remove();
+                $('code.copied').removeClass('copied');
+                $(this).addClass('copied');
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <textarea id="source">
+
+layout: true
+class: top
+
+title: Gardener: Správa Kubernetes pomocí Kubernetes
+place: Konference Kubernetes II.
+date: 20190924
+datenice: 2019-09-24
+email: veverka.kuba@gmail.com
+author: Jakub Veverka
+examples: https://github.com/jwerak/container-examples
+
+---
+class: center
+# {{ title }}
+
+## {{ author }}
+
+{{ place }}
+
+{{ datenice }}
+
+---
+class: center
+## About me
+
+.lc[
+### {{ author }}
+
+[{{ email }}](mailto:{{ email }})
+
+[@jwerak](https://twitter.com/jwerak)
+
+Container Ecosystem Engineer<br>
+[SAP Concur](https://www.concur.com)
+]
+
+.rc[
+![Profile photo](../static/images/profile.jpg)
+]
+
+---
+# About this talk
+
+- Installing Kubernetes - problem solved?
+- Evolution of Kubernetes at your company
+- Kubernetes Day 2 operations
+- Managing several Kubernetes clusters
+- Gardener (Kubernetes Botanist)
+
+---
+# Value of Kubernetes
+
+- API for deploying applications
+- No need to worry about machines
+- Separation of concerns
+
+---
+# Story of Kubernetes cluster
+
+---
+## Installing k8s
+
+.lc[
+- kubeadm
+- kops
+- kubespray
+- ...
+]
+
+--
+.rc[
+- GKE (GCP)
+- EKS (AWS)
+- AKS (Azure)
+- ...
+]
+
+---
+## Kubernetes Day 2 operations
+
+- reconciliation
+- updates
+- vulnerability patching
+
+---
+## Extending Kubernetes cluster
+
+- Authentication
+- Logging
+- Monitoring
+- Ingress
+- Service-Mesh
+- Secrets
+- ...
+
+---
+# one or many Kubernetes clusters
+
+- dev/test/production
+- multi location
+- per customer
+- per team
+- ...
+
+---
+## Cows vs Cattle
+
+- All clusters are equal
+- I can reset any cluster
+- TODO
+- ...
+
+---
+# Gardener - The Kubernetes Botanist
+
+TODO: what is gardener
+
+---
+## The Gardener Mission Statement
+
+Provide Kubernetes Clusters-as-a-Service homogeneously on hyper-scalers and on-premise fully managed and with minimal TCO
+
+--
+
+.center[
+<img src="../static/images/gardener_mission_statement.png" alt="The Gardener Mission Statement" width="90%">
+]
+
+---
+## Gardener Features
+
+- Install Kubernetes cluster on many clouds
+- Managed control plane and workers
+- Create and manage clusters via kubectl or Dashboard
+- Hibernate entire Kubernetes cluster
+- Resilient architecture
+
+---
+## Gardener Architecture
+
+- TODO: Diagram
+
+---
+## Gardener Demo: create cluster via UI
+
+- TODO: video with creating cluster
+
+---
+## Gardener shoot cluster CRD
+
+---
+## Demo: create cluster via kubectl
+
+- TODO: video
+
+---
+## Gardener custom objects
+
+- TODO machine crd and machine controller
+
+---
+## Gardener demo
+
+- delete machine and observe reconciliation
+
+---
+# Gardener Resiliance - Shoot cluster has issues
+
+Kubernetes (brings back the shoot cluster control plane / resources)
+- Machine Controller (brings back machines)
+- ETCD Backup & Restore (brings back the persistence)
+- Gardener reconciliation (brings back infrastructure, configuration, the very essence of what comprises a shoot cluster)
+
+Note: Workload not included and must be handled by the end users (e.g. Heptio Velero)
+
+---
+# Gardener Resiliance - Seed cluster is lost
+
+.center[
+<img src="../static/images/resilience_seed_cluster.png" alt="Gardener Resiliance - Seed cluster is lost" width="90%">
+]
+
+---
+# Conclusion
+TODO
+
+---
+# Questions
+TODO: nice pic
+
+
+    </textarea>
+    <script src="https://remarkjs.com/downloads/remark-latest.min.js">
+    </script>
+    <script>
+        var slideshow = remark.create({
+            ratio: "16:9",
+            /* ratio: "4:3", */
+            slideNumberFormat: '%current%/%total%',
+            highlightStyle: 'solarized-light',
+            highlightLines: true,
+            highlightSpans: true,
+        });
+    </script>
+</body>
+
+</html>
